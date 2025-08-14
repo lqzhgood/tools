@@ -20,7 +20,7 @@ jobs:
 
       - name: Build Watermark
         run: |
-          mkdir -p /deployDist
+          mkdir -p deployDist
           cd watermark
           npm ci
           npm run build
