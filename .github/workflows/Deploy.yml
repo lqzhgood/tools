@@ -24,7 +24,7 @@ jobs:
           cd watermark
           npm ci
           npm run build
-          cp -r dist ../deployDist/
+          cp -a dist ../deployDist/watermark
           cd ../
           ls
           
