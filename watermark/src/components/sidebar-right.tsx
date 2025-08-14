@@ -1,42 +1,19 @@
 import * as React from 'react';
-import { ExternalLink, LogOut, Plus } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
+    // SidebarFooter,
     SidebarHeader,
-    SidebarMenu,
+    // SidebarMenu,
     SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarRail,
-    SidebarSeparator,
+    // SidebarMenuItem,
+    // SidebarRail,
+    // SidebarSeparator,
 } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import SliderForm from '@/page/SliderForm';
-
-// This is sample data.
-const data = {
-    user: {
-        name: 'shadcn',
-        email: 'm@example.com',
-        avatar: '/avatars/shadcn.jpg',
-    },
-    calendars: [
-        {
-            name: 'My Calendars',
-            items: ['Personal', 'Work', 'Family'],
-        },
-        {
-            name: 'Favorites',
-            items: ['Holidays', 'Birthdays'],
-        },
-        {
-            name: 'Other',
-            items: ['Travel', 'Reminders', 'Deadlines'],
-        },
-    ],
-};
 
 export function SidebarRight({
     ...props
@@ -59,6 +36,9 @@ export function SidebarRight({
                                 'https://avatars.githubusercontent.com/u/9134671?v=4'
                             }
                             alt={'lqzh'}
+                            onClick={() =>
+                                window.open('https://github.com/lqzhgood/tools')
+                            }
                         />
                         <AvatarFallback className='rounded-lg'>
                             CN

@@ -1,5 +1,4 @@
 import { fontFamilyOptions } from '@/lib/const';
-import Watermark from '@/lib/Watermark';
 import type { TextForm } from '@/lib/Watermark';
 
 export type Store = {

@@ -2,12 +2,12 @@ import './App.css';
 import { SidebarRight } from '../components/sidebar-right';
 import {
     SidebarInset,
-    SidebarMenuButton,
+    // SidebarMenuButton,
     SidebarProvider,
     SidebarTrigger,
 } from '../components/ui/sidebar';
 import ImgContent from './ImgContent';
-import { Waves } from 'lucide-react'; 
+import { Waves } from 'lucide-react';
 
 function App() {
     return (
