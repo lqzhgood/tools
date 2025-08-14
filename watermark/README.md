@@ -1,3 +1,28 @@
+# 给图片增加水印
+
+shadcn + 原生 Canvas 实现~ 
+
+## 功能
+
+- 画布缩放
+- 水印文字
+- 水印字体
+- 字体大小
+- 旋转角度
+- 字体颜色
+- 行间距
+- 列间距
+- 透明度
+
+
+## 技术
+
+水印使用离屏 Canvs 渲染，
+
+
+
+<hr />
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
