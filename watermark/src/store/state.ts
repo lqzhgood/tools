@@ -31,7 +31,7 @@ export const initialState: Store = {
     /**文字颜色 */
     color: '#ffffff',
     /** 透明度 */
-    opacity: 1,
+    opacity: 0.3,
     /** 间距 */
     rowSpacing: 1.5,
     colSpacing: 1.1,

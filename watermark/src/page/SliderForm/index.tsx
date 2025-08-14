@@ -131,7 +131,7 @@ const SliderForm = () => {
                         </SidebarMenuItem>
                         <SidebarMenuItem className='mt-5'>
                             <div className='grid gap-3'>
-                                <Label>水印角度</Label>
+                                <Label>旋转角度</Label>
                                 <Input
                                     placeholder='角度'
                                     type='number'
