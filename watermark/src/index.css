@@ -4,7 +4,7 @@
 /* @font-face kit by Fonts2u (https://fonts2u.com) */
 @font-face {
     font-family: 'STCaiyun';
-    src: url('@/assets/font/STCAIYUN.woff2') format('woff'),
+    src: url('@/assets/font/STCAIYUN-slim.woff2') format('woff'),
         url('@/assets/font/STCAIYUN.TTF') format('truetype');
     font-weight: normal;
     font-style: normal;
