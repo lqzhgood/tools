@@ -15,7 +15,7 @@ export const useStore = () => useContext(AppContext).store;
 export const useActions = () => useContext(AppContext).dispatch;
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-    const [store, dispatch] = useImmerReducer(reducer, initialState);
+    const [store, dispatch] = useImmerReducer(reducer as any, initialState);
 
     return (
         <AppContext.Provider value={{ store, dispatch }}>
