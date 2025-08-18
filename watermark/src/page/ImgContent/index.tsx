@@ -21,6 +21,8 @@ const ImgContent = () => {
     const store = useStore();
 
     const watermarkForm = pick(store, [
+        'width',
+        'height',
         'text',
         'fontFamily',
         'fontSize',
@@ -32,7 +34,7 @@ const ImgContent = () => {
     ]);
 
     useDeepCompareEffect(() => {
-        watermark.current?.draw(watermarkForm);
+        watermark.current?.setOptions(watermarkForm);
     }, [watermarkForm]);
 
     useUpdateEffect(() => {
@@ -46,7 +48,6 @@ const ImgContent = () => {
                 },
             });
             watermark.current?.setImg(img);
-            watermark.current?.draw(watermarkForm);
         });
     }, [imgFile]);
 

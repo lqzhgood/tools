@@ -1,51 +1,67 @@
+import { pickBy } from 'lodash-es';
+
 export type TextForm = {
+    width: number;
+    height: number;
     text: string;
     fontFamily: string;
-    rotate: number;
     fontSize: number;
+    rotate: number;
     color: string;
-    opacity: number;
     rowSpacing: number;
     colSpacing: number;
+    opacity: number;
 };
 
 class Watermark {
-    canvas: HTMLCanvasElement;
-    get ctx() {
-        return this.canvas.getContext('2d')!;
-    }
+    // 外部 canvas
+    outCanvas: HTMLCanvasElement;
 
+    // 外部传入的 img
     img: HTMLImageElement | null = null;
+    // 图片图层
+    imgCanvas: HTMLCanvasElement = document.createElement('canvas');
+    textCanvas: HTMLCanvasElement = document.createElement('canvas');
+
+    // 输出的宽高， 原始宽高使用 imgCanvas.width
+    width: number = 0;
+    height: number = 0;
 
     text: string = `仅限XX使用,有效期${new Date().toLocaleDateString()}`;
     fontFamily: string = 'Microsoft YaHei';
-    fontSize: number = 16;
+    fontSize: number = 24;
     rotate: number = 45;
+    color: string = '#ffffff';
+    opacity: number = 0.3;
+    rowSpacing: number = 1.5;
+    colSpacing: number = 1.1;
 
     constructor(elm: HTMLCanvasElement) {
-        this.canvas = elm;
+        this.outCanvas = elm;
     }
 
     setImg(img: HTMLImageElement) {
+        const { imgCanvas } = this;
         this.img = img;
-        this.canvas.width = img.naturalWidth;
-        this.canvas.height = img.naturalHeight;
+
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+
+        imgCanvas.width = width;
+        imgCanvas.height = height;
+        const clx = imgCanvas.getContext('2d')!;
+        clx.drawImage(img, 0, 0, width, height);
+
+        this.width = width;
+        this.height = height;
+
+        this.draw();
     }
 
-    drawImage() {
-        if (!this.img) {
-            return;
-        }
-        this.ctx.drawImage(
-            this.img,
-            0,
-            0,
-            this.canvas.width,
-            this.canvas.height
-        );
-    }
+    setOptions(o: Partial<TextForm>) {
+        const n = pickBy(o, v => v !== undefined);
+        Object.assign(this, n);
 
-    drawText(o: TextForm) {
         const {
             text,
             fontFamily,
@@ -55,10 +71,16 @@ class Watermark {
             rowSpacing,
             colSpacing,
             opacity,
-        } = o;
+        } = this;
 
-        const ctx = this.ctx;
-        const canvas = this.canvas;
+        // 使用原始分辨率
+        const width = this.imgCanvas.width;
+        const height = this.imgCanvas.height;
+
+        const canvas = this.textCanvas;
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d')!;
 
         const diameter = Math.ceil(
             Math.sqrt(Math.pow(canvas.width, 2) + Math.pow(canvas.height, 2))
@@ -103,67 +125,52 @@ class Watermark {
 
         // 将离屏Canvas内容绘制到主Canvas，并旋转45度
         ctx.save();
-
         // 移动到画布中心
         ctx.translate(canvas.width / 2, canvas.height / 2);
-
         // 旋转45度（转换为弧度）
         ctx.rotate(-(rotate * Math.PI) / 180);
-
         // 绘制离屏Canvas（居中显示）
         ctx.drawImage(offscreen, -diameter / 2, -diameter / 2);
-
         ctx.restore();
+
+        this.draw();
     }
 
-    draw(o: TextForm) {
-        if (!this.canvas) {
-            return;
-        }
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        if (!this.img) {
-            return;
-        }
-        this.drawImage();
-        this.drawText(o);
+    draw() {
+        const { outCanvas, width, height } = this;
+        outCanvas.width = width;
+        outCanvas.height = height;
+        const outCtx = outCanvas.getContext('2d')!;
+        outCtx.clearRect(0, 0, width, height);
+
+        outCtx.drawImage(this.imgCanvas, 0, 0, width, height);
+        outCtx.drawImage(this.textCanvas, 0, 0, width, height);
     }
 
-    down(width?: number, height?: number) {
-        if (!this.canvas) {
+    down() {
+        if (!this.outCanvas) {
             return;
         }
-
-        let url;
-
-        if (!width || !height) {
-            url = this.canvas.toDataURL('image/png');
-        } else {
-            const downCanvas = document.createElement('canvas');
-            downCanvas.width = width;
-            downCanvas.height = height;
-            const smallCtx = downCanvas.getContext('2d')!;
-            smallCtx.drawImage(
-                this.canvas,
-                // 源画布区域
-                0,
-                0,
-                this.canvas.width,
-                this.canvas.height,
-                // 目标画布区域
-                0,
-                0,
-                width,
-                height
-            );
-            url = downCanvas.toDataURL('image/png');
-        }
-
+        const url = this.outCanvas.toDataURL('image/png');
         const link = document.createElement('a');
         link.download = Date.now() + '.png';
         link.href = url;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    asyncDown() {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                try {
+                    this.down();
+                    resolve(void 0);
+                } catch (error) {
+                    reject(error);
+                }
+            }, 0);
+        });
     }
 }
 

@@ -1,7 +1,7 @@
 import Watermark from '@/lib/Watermark';
 import type { Store } from './state';
 
-type Action =
+export type Action =
     | {
           type: 'initCanvas';
           payload: {

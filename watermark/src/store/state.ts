@@ -1,8 +1,9 @@
 import { fontFamilyOptions } from '@/lib/const';
+import Watermark from '@/lib/Watermark';
 import type { TextForm } from '@/lib/Watermark';
 
 export type Store = {
-    watermark: any | undefined;
+    watermark: InstanceType<typeof Watermark> | undefined;
 
     width: number | undefined;
     height: number | undefined;
@@ -13,8 +14,8 @@ export type Store = {
 export const initialState: Store = {
     watermark: undefined,
 
-    width: undefined,
-    height: undefined,
+    width: 800,
+    height: 600,
     /** 原始宽高比 */
     aspectRatio: 16 / 9,
     /** 按比例缩放 */

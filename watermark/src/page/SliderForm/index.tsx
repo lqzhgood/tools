@@ -18,17 +18,16 @@ import {
 
 import { fontFamilyOptions } from '@/lib/const';
 import { useActions, useStore } from '@/store';
-import { Download } from 'lucide-react';
+import { Download, Loader2Icon } from 'lucide-react';
 import SizeForm from './SizeForm';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 const SliderForm = () => {
     const {
         watermark,
-        width,
-        height,
         text,
         rotate,
         fontSize,
@@ -39,6 +38,8 @@ const SliderForm = () => {
         opacity,
     } = useStore();
     const actions = useActions();
+
+    const [loading, setLoading] = useState(false);
 
     return (
         <>
@@ -253,11 +254,19 @@ const SliderForm = () => {
                         <SidebarMenuItem className='mt-5'>
                             <Button
                                 className='w-full cursor-pointer'
+                                disabled={!watermark || loading}
                                 onClick={() => {
-                                    watermark?.down(width, height);
+                                    setLoading(true);
+                                    watermark!.asyncDown().finally(() => {
+                                        setLoading(false);
+                                    });
                                 }}
                             >
-                                <Download />
+                                {loading ? (
+                                    <Loader2Icon className='animate-spin' />
+                                ) : (
+                                    <Download />
+                                )}
                                 保存
                             </Button>
                         </SidebarMenuItem>
