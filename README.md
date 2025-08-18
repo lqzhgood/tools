@@ -6,4 +6,4 @@ some web tools
 
 [http://lqzhgood.github.io/tools/](http://lqzhgood.github.io/tools/)
 
-- watermark 图片加水印
+- [watermark 图片加水印](./watermark)
