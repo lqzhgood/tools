@@ -2,6 +2,8 @@ import Watermark from '@/lib/Watermark';
 import { useActions, useStore } from '@/store';
 import {
     useDeepCompareEffect,
+    useDrag,
+    useDrop,
     useEventListener,
     useMount,
     useUpdateEffect,
@@ -9,7 +11,7 @@ import {
 import { useRef, useState } from 'react';
 import { pick } from 'lodash-es';
 import { ImageUp } from 'lucide-react';
-import { loadImg } from './utils';
+import { getImgByDrop, getImgByPaste, loadImg } from './utils';
 import clx from 'classnames';
 
 const ImgContent = () => {
@@ -57,19 +59,37 @@ const ImgContent = () => {
 
     useEventListener('paste', event => {
         const items = (event.clipboardData && event.clipboardData.items) || [];
-        let file = null;
-        // 检索剪切板items
-        for (var i = 0; i < items.length; i++) {
-            if (items[i].type.indexOf('image') !== -1) {
-                file = items[i].getAsFile();
-                setImgFile(file);
-                break;
-            }
-        }
+        const img = getImgByPaste(items);
+        setImgFile(img);
+    });
+
+    const [isHovering, setIsHovering] = useState(false);
+
+    const dropRef = useRef(null);
+
+    useDrop(dropRef, {
+        onFiles: (files, e) => {
+            console.log(e, files);
+            const img = getImgByDrop(files);
+            setImgFile(img);
+            setIsHovering(false);
+        },
+        onDragEnter: () => setIsHovering(true),
+        onDragLeave: () => setIsHovering(false),
     });
 
     return (
-        <div>
+        <div
+            className='bg-muted mx-auto h-[100%] w-full rounded-xl flex items-center justify-center'
+            style={
+                isHovering
+                    ? {
+                          outline: '4px dashed #999',
+                      }
+                    : undefined
+            }
+            ref={dropRef}
+        >
             <label>
                 <ImageUp
                     className={clx([

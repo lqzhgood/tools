@@ -23,10 +23,8 @@ function App() {
                         <SidebarTrigger className='cursor-pointer' />
                     </div>
                 </header>
-                <div className='flex flex-1 flex-col p-4 pt-0'>
-                    <div className='bg-muted mx-auto h-[100%] w-full rounded-xl flex items-center justify-center'>
-                        <ImgContent />
-                    </div>
+                <div className='flex flex-1 flex-col p-4 '>
+                    <ImgContent />
                 </div>
             </SidebarInset>
             <SidebarRight />
