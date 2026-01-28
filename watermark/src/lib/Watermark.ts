@@ -29,7 +29,7 @@ class Watermark {
 
     text: string = `仅限XX使用,有效期${new Date().toLocaleDateString()}`;
     fontFamily: string = 'Microsoft YaHei';
-    fontSize: number = 24;
+    fontSize: number = 48;
     rotate: number = 45;
     color: string = '#ffffff';
     opacity: number = 0.3;
@@ -73,6 +73,10 @@ class Watermark {
             opacity,
         } = this;
 
+        if (!text || !fontFamily || !fontSize) {
+            return;
+        }
+
         // 使用原始分辨率
         const width = this.imgCanvas.width;
         const height = this.imgCanvas.height;
@@ -83,7 +87,7 @@ class Watermark {
         const ctx = canvas.getContext('2d')!;
 
         const diameter = Math.ceil(
-            Math.sqrt(Math.pow(canvas.width, 2) + Math.pow(canvas.height, 2))
+            Math.sqrt(Math.pow(canvas.width, 2) + Math.pow(canvas.height, 2)),
         );
         const offscreen = document.createElement('canvas');
         offscreen.width = diameter;

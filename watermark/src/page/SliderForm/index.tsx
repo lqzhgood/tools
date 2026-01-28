@@ -24,6 +24,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import EventWrap from './EventWrap';
 
 const SliderForm = () => {
     const {
@@ -69,15 +70,20 @@ const SliderForm = () => {
                         <SidebarMenuItem className='mt-5'>
                             <div className='grid gap-3'>
                                 <Label>水印文字</Label>
-                                <Textarea
+                                <EventWrap
                                     value={text}
-                                    onChange={e =>
+                                    valuePath={'target.value'}
+                                    onChange={v => {
                                         actions({
                                             type: 'setWater',
-                                            payload: { text: e.target.value },
-                                        })
-                                    }
-                                />
+                                            payload: {
+                                                text: v,
+                                            },
+                                        });
+                                    }}
+                                >
+                                    <Textarea />
+                                </EventWrap>
                             </div>
                         </SidebarMenuItem>
                         <SidebarMenuItem className='mt-5'>
@@ -108,7 +114,6 @@ const SliderForm = () => {
                                                         fontFamily: o.value,
                                                     }}
                                                 >
-                                                    {' '}
                                                     {o.label}
                                                 </span>
                                             </SelectItem>
@@ -120,59 +125,59 @@ const SliderForm = () => {
                         <SidebarMenuItem className='mt-5'>
                             <div className='grid gap-3'>
                                 <Label>字体大小</Label>
-                                <Input
-                                    placeholder='角度'
-                                    type='number'
+                                <EventWrap
                                     value={fontSize}
+                                    valuePath='target.value'
                                     onChange={v =>
                                         actions({
                                             type: 'setWater',
                                             payload: {
-                                                fontSize: parseInt(
-                                                    v.target.value,
-                                                ),
+                                                fontSize: parseInt(v + ''),
                                             },
                                         })
                                     }
-                                />
+                                >
+                                    <Input placeholder='大小' type='number' />
+                                </EventWrap>
                             </div>
                         </SidebarMenuItem>
                         <SidebarMenuItem className='mt-5'>
                             <div className='grid gap-3'>
                                 <Label>旋转角度</Label>
-                                <Input
-                                    placeholder='角度'
-                                    type='number'
+                                <EventWrap
                                     value={rotate}
+                                    valuePath='target.value'
                                     onChange={v =>
                                         actions({
                                             type: 'setWater',
                                             payload: {
-                                                rotate: parseInt(
-                                                    v.target.value,
-                                                ),
+                                                rotate: parseInt(v + ''),
                                             },
                                         })
                                     }
-                                />
+                                >
+                                    <Input placeholder='角度' type='number' />
+                                </EventWrap>
                             </div>
                         </SidebarMenuItem>
                         <SidebarMenuItem className='mt-5'>
                             <div className='grid gap-3'>
                                 <Label>颜色</Label>
                                 <div className='flex items-center gap-2'>
-                                    <input
-                                        type='color'
+                                    <EventWrap
                                         value={color}
+                                        valuePath='target.value'
                                         onChange={v =>
                                             actions({
                                                 type: 'setWater',
                                                 payload: {
-                                                    color: v.target.value,
+                                                    color: v,
                                                 },
                                             })
                                         }
-                                    />
+                                    >
+                                        <input type='color' />
+                                    </EventWrap>
                                     {color}
                                 </div>
                             </div>
@@ -182,25 +187,27 @@ const SliderForm = () => {
                                 <Label>行间距</Label>
                                 <div className='flex items-center gap-2'>
                                     {rowSpacing}
-                                    <input
-                                        className='flex-auto'
-                                        type='range'
-                                        id='spacing'
-                                        min='1'
-                                        max='2.5'
-                                        step='0.1'
+                                    <EventWrap
                                         value={rowSpacing}
-                                        onChange={v =>
+                                        valuePath='target.value'
+                                        onChange={v => {
                                             actions({
                                                 type: 'setWater',
                                                 payload: {
-                                                    rowSpacing: Number(
-                                                        v.target.value,
-                                                    ),
+                                                    rowSpacing: Number(v),
                                                 },
-                                            })
-                                        }
-                                    />
+                                            });
+                                        }}
+                                    >
+                                        <input
+                                            className='flex-auto'
+                                            type='range'
+                                            id='spacing'
+                                            min='1'
+                                            max='2.5'
+                                            step='0.1'
+                                        />
+                                    </EventWrap>
                                 </div>
                             </div>
                         </SidebarMenuItem>
@@ -209,25 +216,27 @@ const SliderForm = () => {
                                 <Label>列间距</Label>
                                 <div className='flex items-center gap-2'>
                                     {colSpacing}
-                                    <input
-                                        className='flex-auto'
-                                        type='range'
-                                        id='spacing'
-                                        min='1'
-                                        max='2.5'
-                                        step='0.1'
+                                    <EventWrap
                                         value={colSpacing}
+                                        valuePath='target.value'
                                         onChange={v =>
                                             actions({
                                                 type: 'setWater',
                                                 payload: {
-                                                    colSpacing: Number(
-                                                        v.target.value,
-                                                    ),
+                                                    colSpacing: Number(v),
                                                 },
                                             })
                                         }
-                                    />
+                                    >
+                                        <input
+                                            className='flex-auto'
+                                            type='range'
+                                            id='spacing'
+                                            min='1'
+                                            max='2.5'
+                                            step='0.1'
+                                        />
+                                    </EventWrap>
                                 </div>
                             </div>
                         </SidebarMenuItem>
@@ -236,25 +245,27 @@ const SliderForm = () => {
                                 <Label>透明的</Label>
                                 <div className='flex items-center gap-2'>
                                     {opacity}
-                                    <input
-                                        className='flex-auto'
-                                        type='range'
-                                        id='spacing'
-                                        min='0.1'
-                                        max='1'
-                                        step='0.1'
+                                    <EventWrap
                                         value={opacity}
+                                        valuePath='target.value'
                                         onChange={v =>
                                             actions({
                                                 type: 'setWater',
                                                 payload: {
-                                                    opacity: Number(
-                                                        v.target.value,
-                                                    ),
+                                                    opacity: Number(v),
                                                 },
                                             })
                                         }
-                                    />
+                                    >
+                                        <input
+                                            className='flex-auto'
+                                            type='range'
+                                            id='spacing'
+                                            min='0.1'
+                                            max='1'
+                                            step='0.1'
+                                        />
+                                    </EventWrap>
                                 </div>
                             </div>
                         </SidebarMenuItem>

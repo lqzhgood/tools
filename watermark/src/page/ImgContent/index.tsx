@@ -68,8 +68,7 @@ const ImgContent = () => {
     const dropRef = useRef(null);
 
     useDrop(dropRef, {
-        onFiles: (files, e) => {
-            console.log(e, files);
+        onFiles: files => {
             const img = getImgByDrop(files);
             setImgFile(img);
             setIsHovering(false);

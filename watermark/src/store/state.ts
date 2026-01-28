@@ -32,7 +32,7 @@ export const initialState: Store = {
     /** 旋转角度 */
     rotate: 45,
     /** 字体大小 */
-    fontSize: 24,
+    fontSize: 48,
     /**文字颜色 */
     color: '#ffffff',
     /** 透明度 */

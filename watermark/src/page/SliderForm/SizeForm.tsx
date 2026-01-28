@@ -6,35 +6,38 @@ import {
 } from '@/components/ui/tooltip';
 import { useActions, useStore } from '@/store';
 import { LockOpen, Lock } from 'lucide-react';
+import EventWrap from './EventWrap';
 
 const SizeForm = () => {
     const { width, height, isAspectLocked } = useStore();
     const actions = useActions();
     return (
         <>
-            <Input
-                placeholder='width'
-                type='number'
+            <EventWrap
                 value={width}
+                valuePath='target.value'
                 onChange={v =>
                     actions({
                         type: 'setWidthHeight',
-                        payload: { width: parseInt(v.target.value) },
+                        payload: { width: parseInt(v + '') },
                     })
                 }
-            />
+            >
+                <Input placeholder='width' type='number' />
+            </EventWrap>
             X
-            <Input
-                placeholder='height'
-                type='number'
+            <EventWrap
                 value={height}
+                valuePath='target.value'
                 onChange={v =>
                     actions({
                         type: 'setWidthHeight',
-                        payload: { height: parseInt(v.target.value) },
+                        payload: { height: parseInt(v + '') },
                     })
                 }
-            />
+            >
+                <Input placeholder='height' type='number' />
+            </EventWrap>
             <Tooltip>
                 <TooltipTrigger>
                     <div
