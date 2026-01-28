@@ -29,15 +29,20 @@ export type Action =
           };
       };
 
+const DEFAULT_INIT_WIDTH = 800;
+
 export function reducer(draft: Store, action: Action) {
     const { type } = action;
     switch (type) {
         case 'initCanvas': {
             const { width, height, watermark } = action.payload;
             draft.watermark = watermark;
-            draft.width = width;
-            draft.height = height;
+            draft.naturalWidth = width;
+            draft.naturalHeight = height;
             draft.aspectRatio = width / height;
+
+            draft.width = DEFAULT_INIT_WIDTH;
+            draft.height = Math.floor(DEFAULT_INIT_WIDTH / draft.aspectRatio);
             return;
         }
         case 'toggleAspectLock': {

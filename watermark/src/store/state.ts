@@ -5,6 +5,8 @@ import type { TextForm } from '@/lib/Watermark';
 export type Store = {
     watermark: InstanceType<typeof Watermark> | undefined;
 
+    naturalWidth: number | undefined;
+    naturalHeight: number | undefined;
     width: number | undefined;
     height: number | undefined;
     aspectRatio: number;
@@ -14,6 +16,8 @@ export type Store = {
 export const initialState: Store = {
     watermark: undefined,
 
+    naturalWidth: undefined,
+    naturalHeight: undefined,
     width: 800,
     height: 600,
     /** 原始宽高比 */
@@ -22,7 +26,7 @@ export const initialState: Store = {
     isAspectLocked: true,
 
     // 水印
-    text: '仅限XX使用,有效期' + new Date().toLocaleDateString(),
+    text: '仅限XX验证使用,有效期' + new Date().toLocaleDateString(),
     /** 字体 */
     fontFamily: fontFamilyOptions[0].value,
     /** 旋转角度 */

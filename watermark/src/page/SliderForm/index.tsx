@@ -27,6 +27,8 @@ import { useState } from 'react';
 
 const SliderForm = () => {
     const {
+        naturalWidth,
+        naturalHeight,
         watermark,
         text,
         rotate,
@@ -57,6 +59,11 @@ const SliderForm = () => {
                                 <div className='flex items-center gap-2'>
                                     <SizeForm />
                                 </div>
+                                {!!naturalWidth && (
+                                    <div className='text-sm text-muted-foreground'>
+                                        | {naturalWidth} x {naturalHeight}
+                                    </div>
+                                )}
                             </div>
                         </SidebarMenuItem>
                         <SidebarMenuItem className='mt-5'>
@@ -122,7 +129,7 @@ const SliderForm = () => {
                                             type: 'setWater',
                                             payload: {
                                                 fontSize: parseInt(
-                                                    v.target.value
+                                                    v.target.value,
                                                 ),
                                             },
                                         })
@@ -142,7 +149,7 @@ const SliderForm = () => {
                                             type: 'setWater',
                                             payload: {
                                                 rotate: parseInt(
-                                                    v.target.value
+                                                    v.target.value,
                                                 ),
                                             },
                                         })
@@ -188,7 +195,7 @@ const SliderForm = () => {
                                                 type: 'setWater',
                                                 payload: {
                                                     rowSpacing: Number(
-                                                        v.target.value
+                                                        v.target.value,
                                                     ),
                                                 },
                                             })
@@ -215,7 +222,7 @@ const SliderForm = () => {
                                                 type: 'setWater',
                                                 payload: {
                                                     colSpacing: Number(
-                                                        v.target.value
+                                                        v.target.value,
                                                     ),
                                                 },
                                             })
@@ -242,7 +249,7 @@ const SliderForm = () => {
                                                 type: 'setWater',
                                                 payload: {
                                                     opacity: Number(
-                                                        v.target.value
+                                                        v.target.value,
                                                     ),
                                                 },
                                             })
@@ -251,7 +258,7 @@ const SliderForm = () => {
                                 </div>
                             </div>
                         </SidebarMenuItem>
-                        <SidebarMenuItem className='mt-5'>
+                        <SidebarMenuItem className='mt-5 flex flex-col gap-2'>
                             <Button
                                 className='w-full cursor-pointer'
                                 disabled={!watermark || loading}
@@ -268,6 +275,15 @@ const SliderForm = () => {
                                     <Download />
                                 )}
                                 保存
+                            </Button>
+                            <Button
+                                variant={'outline'}
+                                className='w-full cursor-pointer'
+                                onClick={() => {
+                                    history.go(0);
+                                }}
+                            >
+                                重置
                             </Button>
                         </SidebarMenuItem>
                     </SidebarMenu>
