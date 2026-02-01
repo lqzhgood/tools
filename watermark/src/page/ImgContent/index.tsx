@@ -1,8 +1,7 @@
 import Watermark from '@/lib/Watermark';
 import { useActions, useStore } from '@/store';
 import {
-    useDeepCompareEffect,
-    useDrag,
+    useDeepCompareEffect, 
     useDrop,
     useEventListener,
     useMount,
