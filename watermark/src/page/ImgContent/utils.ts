@@ -1,47 +1,54 @@
 import heic2any from 'heic2any';
 
-export function loadImg(
+export async function loadImg(
     file: File | null | undefined,
 ): Promise<HTMLImageElement> {
-    return new Promise((resolve, reject) => {
-        if (!file) {
-            reject(new Error('No file provided'));
-            return;
-        }
+    if (!file) {
+        throw new Error('No file provided');
+    }
 
-        const isHEIC =
-            file?.type === 'image/heic' ||
-            file?.type === 'image/heif' ||
-            file?.name.toLowerCase().endsWith('.heic') ||
-            file?.name.toLowerCase().endsWith('.heif');
+    const isHEIC =
+        file.type === 'image/heic' ||
+        file.type === 'image/heif' ||
+        file.name.toLowerCase().endsWith('.heic') ||
+        file.name.toLowerCase().endsWith('.heif');
 
-        if (!isHEIC) {
-            resolve(file);
-        }
-
-        resolve(
-            heic2any({
+    // 转换 HEIC 格式
+    let blob: Blob = file;
+    if (isHEIC) {
+        try {
+            const result = await heic2any({
                 blob: file,
                 toType: 'image/jpeg',
                 quality: 1,
-            }),
-        );
-    }).then(file => {
-        return new Promise(resolve => {
-            const img = new Image();
+            });
+            // heic2any 可能返回 Blob 或 Blob[]
+            blob = Array.isArray(result) ? result[0] : result;
+        } catch (error) {
+            throw new Error('HEIC 图片转换失败');
+        }
+    }
 
-            img.onload = () => {
-                img.onload = null;
-                img.onerror = null;
-                resolve(img);
-            };
+    // 加载图片
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(blob);
 
-            img.onerror = () => {
-                alert('图片解码错误');
-            };
+        img.onload = () => {
+            URL.revokeObjectURL(url); // 释放内存
+            img.onload = null;
+            img.onerror = null;
+            resolve(img);
+        };
 
-            img.src = URL.createObjectURL(file as Blob);
-        });
+        img.onerror = () => {
+            URL.revokeObjectURL(url); // 释放内存
+            img.onload = null;
+            img.onerror = null;
+            reject(new Error('图片解码错误'));
+        };
+
+        img.src = url;
     });
 }
 
