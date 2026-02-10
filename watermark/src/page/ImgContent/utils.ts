@@ -52,24 +52,21 @@ export async function loadImg(
     });
 }
 
-export function getImgByPaste(items: DataTransferItemList | never[]) {
-    let file = null;
+function findImageFile<T>(items: ArrayLike<T>, getFile: (item: T) => File | null): File | null {
     for (let i = 0; i < items.length; i++) {
-        if (items[i].type.indexOf('image') !== -1) {
-            file = items[i].getAsFile();
-            break;
+        const item = items[i];
+        const file = getFile(item);
+        if (file && file.type.indexOf('image') !== -1) {
+            return file;
         }
     }
-    return file;
+    return null;
+}
+
+export function getImgByPaste(items: DataTransferItemList | never[]) {
+    return findImageFile(items, item => (item as DataTransferItem).getAsFile());
 }
 
 export function getImgByDrop(files: File[]) {
-    let file = null;
-    for (let i = 0; i < files.length; i++) {
-        if (files[i].type.indexOf('image') !== -1) {
-            file = files[i];
-            break;
-        }
-    }
-    return file;
+    return findImageFile(files, item => item);
 }

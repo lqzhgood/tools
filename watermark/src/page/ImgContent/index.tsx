@@ -1,13 +1,13 @@
 import Watermark from '@/lib/Watermark';
 import { useActions, useStore } from '@/store';
 import {
-    useDeepCompareEffect, 
+    useDeepCompareEffect,
     useDrop,
     useEventListener,
     useMount,
     useUpdateEffect,
 } from 'ahooks';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { pick } from 'lodash-es';
 import { ImageUp } from 'lucide-react';
 import { getImgByDrop, getImgByPaste, loadImg } from './utils';
@@ -21,35 +21,43 @@ const ImgContent = () => {
     const actions = useActions();
     const store = useStore();
 
-    const watermarkForm = pick(store, [
-        'width',
-        'height',
-        'text',
-        'fontFamily',
-        'fontSize',
-        'rotate',
-        'color',
-        'rowSpacing',
-        'colSpacing',
-        'opacity',
-    ]);
+    const watermarkForm = useMemo(
+        () =>
+            pick(store, [
+                'width',
+                'height',
+                'text',
+                'fontFamily',
+                'fontSize',
+                'rotate',
+                'color',
+                'rowSpacing',
+                'colSpacing',
+                'opacity',
+            ]),
+        [store],
+    );
 
     useDeepCompareEffect(() => {
         watermark.current?.setOptions(watermarkForm);
     }, [watermarkForm]);
 
     useUpdateEffect(() => {
-        loadImg(imgFile).then(img => {
-            actions({
-                type: 'initCanvas',
-                payload: {
-                    watermark: watermark.current!,
-                    width: img.naturalWidth,
-                    height: img.naturalHeight,
-                },
+        loadImg(imgFile)
+            .then(img => {
+                actions({
+                    type: 'initCanvas',
+                    payload: {
+                        watermark: watermark.current!,
+                        width: img.naturalWidth,
+                        height: img.naturalHeight,
+                    },
+                });
+                watermark.current?.setImg(img);
+            })
+            .catch((error: any) => {
+                alert(`加载图片失败: ${error?.message}`);
             });
-            watermark.current?.setImg(img);
-        });
     }, [imgFile]);
 
     useMount(() => {
@@ -102,6 +110,7 @@ const ImgContent = () => {
                     onChange={e => {
                         const file = e.target?.files?.[0];
                         setImgFile(file);
+                        e.target.value = ''; // 清空以允许重复选择
                     }}
                 />
                 <canvas

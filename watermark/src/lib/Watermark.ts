@@ -22,6 +22,8 @@ class Watermark {
     // 图片图层
     imgCanvas: HTMLCanvasElement = document.createElement('canvas');
     textCanvas: HTMLCanvasElement = document.createElement('canvas');
+    // 离屏 canvas (复用以提升性能)
+    private offscreenCanvas: HTMLCanvasElement = document.createElement('canvas');
 
     // 输出的宽高， 原始宽高使用 imgCanvas.width
     width: number = 0;
@@ -89,10 +91,11 @@ class Watermark {
         const diameter = Math.ceil(
             Math.sqrt(Math.pow(canvas.width, 2) + Math.pow(canvas.height, 2)),
         );
-        const offscreen = document.createElement('canvas');
+        const offscreen = this.offscreenCanvas;
         offscreen.width = diameter;
         offscreen.height = diameter;
         const offCtx = offscreen.getContext('2d')!;
+        offCtx.clearRect(0, 0, diameter, diameter);
 
         // 设置离屏Canvas的字体和颜色
         offCtx.font = `${fontSize}px '${fontFamily}'`;
@@ -164,17 +167,8 @@ class Watermark {
         document.body.removeChild(link);
     }
 
-    asyncDown() {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                try {
-                    this.down();
-                    resolve(void 0);
-                } catch (error) {
-                    reject(error);
-                }
-            }, 0);
-        });
+    async asyncDown() {
+        this.down();
     }
 }
 
