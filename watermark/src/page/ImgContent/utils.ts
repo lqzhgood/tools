@@ -1,19 +1,47 @@
+import heic2any from 'heic2any';
+
 export function loadImg(
     file: File | null | undefined,
 ): Promise<HTMLImageElement> {
-    if (!file) {
-        return Promise.reject(new Error('No file provided'));
-    }
-    return new Promise(resolve => {
-        const reader = new FileReader();
-        reader.onload = function () {
+    return new Promise((resolve, reject) => {
+        if (!file) {
+            reject(new Error('No file provided'));
+            return;
+        }
+
+        const isHEIC =
+            file?.type === 'image/heic' ||
+            file?.type === 'image/heif' ||
+            file?.name.toLowerCase().endsWith('.heic') ||
+            file?.name.toLowerCase().endsWith('.heif');
+
+        if (!isHEIC) {
+            resolve(file);
+        }
+
+        resolve(
+            heic2any({
+                blob: file,
+                toType: 'image/jpeg',
+                quality: 1,
+            }),
+        );
+    }).then(file => {
+        return new Promise(resolve => {
             const img = new Image();
-            img.src = window.URL.createObjectURL(file);
+
             img.onload = () => {
+                img.onload = null;
+                img.onerror = null;
                 resolve(img);
             };
-        };
-        reader.readAsDataURL(file);
+
+            img.onerror = () => {
+                alert('图片解码错误');
+            };
+
+            img.src = URL.createObjectURL(file as Blob);
+        });
     });
 }
 
