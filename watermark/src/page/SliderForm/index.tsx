@@ -285,7 +285,7 @@ const SliderForm = () => {
                                 ) : (
                                     <Download />
                                 )}
-                                保存
+                                下载
                             </Button>
                             <Button
                                 variant={'outline'}
