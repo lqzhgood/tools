@@ -188,6 +188,7 @@ const SliderForm = () => {
                                 <div className='flex items-center gap-2'>
                                     {rowSpacing}
                                     <EventWrap
+                                        trigger='onChange'
                                         value={rowSpacing}
                                         valuePath='target.value'
                                         onChange={v => {
@@ -217,6 +218,7 @@ const SliderForm = () => {
                                 <div className='flex items-center gap-2'>
                                     {colSpacing}
                                     <EventWrap
+                                        trigger='onChange'
                                         value={colSpacing}
                                         valuePath='target.value'
                                         onChange={v =>
@@ -242,10 +244,11 @@ const SliderForm = () => {
                         </SidebarMenuItem>
                         <SidebarMenuItem className='mt-5'>
                             <div className='grid gap-3'>
-                                <Label>透明的</Label>
+                                <Label>透明度</Label>
                                 <div className='flex items-center gap-2'>
                                     {opacity}
                                     <EventWrap
+                                        trigger='onChange'
                                         value={opacity}
                                         valuePath='target.value'
                                         onChange={v =>
